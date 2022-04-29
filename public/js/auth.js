@@ -48,8 +48,8 @@ miFormulario.addEventListener('submit', ev => {
         .then( ({token, usuario}) => {
             localStorage.setItem( 'email', usuario.correo );
             localStorage.setItem( 'token', token );
-            // window.location = 'chat.html';
-            console.log( usuario );
+            window.location = 'chat.html';
+            // console.log( usuario );
 
         })
         .catch(console.warn);
