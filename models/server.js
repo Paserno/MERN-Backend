@@ -11,6 +11,7 @@ class Server {
     constructor() {
         this.app  = express();
         this.port = process.env.PORT;
+        // HTTP server
         this.server = createServer( this.app );
         this.io = require('socket.io')( this.server );
 
