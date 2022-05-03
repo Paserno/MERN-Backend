@@ -63,14 +63,14 @@ const usuariosPut = async(req, res = response) => {
 }
 
 
-const usuariosDelete = async(req, res = response) => {
+// const usuariosDelete = async(req, res = response) => {
 
-    const { id } = req.params;
-    const usuario = await Usuario.findByIdAndUpdate( id, { estado: false } );
+//     const { id } = req.params;
+//     const usuario = await Usuario.findByIdAndUpdate( id, { estado: false } );
 
     
-    res.json(usuario);
-}
+//     res.json(usuario);
+// }
 
 
 
@@ -79,6 +79,5 @@ module.exports = {
     usuariosGet,
     usuariosPost,
     usuariosPut,
-    usuariosPatch,
-    usuariosDelete,
+    // usuariosDelete,
 }

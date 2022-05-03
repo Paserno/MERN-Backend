@@ -9,26 +9,22 @@ const {
     tieneRole
 } = require('../middlewares');
 
-
 const { esRoleValido, emailExiste, existeUsuarioPorId } = require('../helpers/db-validators');
+const { usuariosGet } = require('../controllers/usuarios');
+const { adminPost, adminDelete, loginAdmin } = require('../controllers/admin');
 
-const { usuariosGet,
-        usuariosPut,
-        usuariosPost,} = require('../controllers/usuarios');
 
 const router = Router();
 
 
 router.get('/', usuariosGet );
 
-router.put('/:id',[
-    check('id', 'No es un ID válido').isMongoId(),
-    check('id').custom( existeUsuarioPorId ),
-    check('rol').custom( esRoleValido ), 
+router.post('/login',[
+    check('correo', 'El correo es obligatorio').isEmail(),
+    check('password', 'La contraseña es obligatoria').not().isEmpty(),
     validarCampos
-],usuariosPut );
+],loginAdmin );
 
-// Crear nuevo usuario
 router.post('/',[
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('apellido', 'El apellido es obligatorio').not().isEmpty(),
@@ -38,23 +34,20 @@ router.post('/',[
     check('ciudad', 'La ciudad es obligatoria').not().isEmpty(),
     check('direccion', 'La dirección es obligatoria').not().isEmpty(),
     // check('rol', 'No es un rol válido').isIn(['ADMIN_ROLE','USER_ROLE']),
-    check('rol').custom( esRoleValido ), 
+    // check('rol').custom( esRoleValido ), 
     validarCampos
-], usuariosPost );
+], adminPost)
 
-// router.delete('/:id',[
-//     validarJWT,
-//     // esAdminRole,
-//     tieneRole('ADMIN_ROLE', 'VENTAR_ROLE','OTRO_ROLE'),
-//     check('id', 'No es un ID válido').isMongoId(),
-//     check('id').custom( existeUsuarioPorId ),
-//     validarCampos
-// ],usuariosDelete );
-
-
-
-
+router.delete('/:id',[
+    validarJWT,
+    esAdminRole,
+    tieneRole('ADMIN_ROLE', 'VENTAR_ROLE','OTRO_ROLE'),
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom( existeUsuarioPorId ),
+    validarCampos
+],adminDelete );
 
 
 
 module.exports = router;
+
