@@ -27,8 +27,8 @@ const usuariosGet = async(req = request, res = response) => {
 
 const usuariosPost = async(req, res = response) => {
     
-    const { nombre, correo, password, rol } = req.body;
-    const usuario = new Usuario({ nombre, correo, password, rol });
+    const { nombre, apellido, correo, password, ciudad, direccion} = req.body;
+    const usuario = new Usuario({ nombre,apellido, correo, password, ciudad, direccion });
 
     // Encriptar la contraseña
     const salt = bcryptjs.genSaltSync();
@@ -62,11 +62,6 @@ const usuariosPut = async(req, res = response) => {
     res.json(usuario);
 }
 
-const usuariosPatch = (req, res = response) => {
-    res.json({
-        msg: 'patch API - usuariosPatch'
-    });
-}
 
 const usuariosDelete = async(req, res = response) => {
 

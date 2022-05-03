@@ -30,11 +30,15 @@ router.put('/:id',[
     validarCampos
 ],usuariosPut );
 
+// Crear nuevo usuario
 router.post('/',[
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+    check('apellido', 'El apellido es obligatorio').not().isEmpty(),
     check('correo', 'El correo no es válido').isEmail(),
     check('password', 'El password debe de ser más de 6 letras').isLength({ min: 6 }),
     check('correo').custom( emailExiste ),
+    check('ciudad', 'La ciudad es obligatoria').not().isEmpty(),
+    check('direccion', 'La dirección es obligatoria').not().isEmpty(),
     // check('rol', 'No es un rol válido').isIn(['ADMIN_ROLE','USER_ROLE']),
     check('rol').custom( esRoleValido ), 
     validarCampos
