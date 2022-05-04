@@ -6,7 +6,8 @@ const JardineroSchema = Schema({
     usuario: {
         type: Schema.Types.ObjectId,
         ref: 'Usuario',
-        required: true
+        required: true,
+        unique: false,
     },
     especialidad: {
         type: String,
@@ -15,6 +16,7 @@ const JardineroSchema = Schema({
     estado: {
         type: Boolean,
         required: true,
+        default: true,
     },
     activo: {
         type: Boolean,
@@ -27,8 +29,8 @@ const JardineroSchema = Schema({
 });
 
 
-ProductoSchema.methods.toJSON = function() {
-    const { __v, ...data  } = this.toObject();
+JardineroSchema.methods.toJSON = function() {
+    const { __v, estado, ...data  } = this.toObject();
     return data;
 }
 

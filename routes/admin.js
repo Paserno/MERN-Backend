@@ -12,12 +12,14 @@ const {
 const { esRoleValido, emailExiste, existeUsuarioPorId } = require('../helpers/db-validators');
 const { usuariosGet } = require('../controllers/usuarios');
 const { adminPost, adminDelete, loginAdmin } = require('../controllers/admin');
+const { obtenerJardineros, crearJardinero } = require('../controllers/jardin');
 
 
 const router = Router();
 
 
 router.get('/', usuariosGet );
+router.get('/jardin', obtenerJardineros );
 
 router.post('/login',[
     check('correo', 'El correo es obligatorio').isEmail(),
@@ -46,6 +48,13 @@ router.delete('/:id',[
     check('id').custom( existeUsuarioPorId ),
     validarCampos
 ],adminDelete );
+
+
+router.post('/jardinero',[
+    check('usuario','No es un id de Mongo').isMongoId(),
+    check('especialidad', 'La dirección es obligatoria').not().isEmpty(),
+    validarCampos
+], crearJardinero)
 
 
 

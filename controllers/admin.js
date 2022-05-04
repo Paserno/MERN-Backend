@@ -13,6 +13,7 @@ const loginAdmin = async(req, res = response) => {
         const usuario = await Usuario.findOne({ correo });
         if ( !usuario ) {
             return res.status(400).json({
+                ok: false,
                 msg: 'Usuario / Password no son correctos - correo'
             });
         }
@@ -20,6 +21,7 @@ const loginAdmin = async(req, res = response) => {
         // SI el usuario está activo
         if ( !usuario.estado ) {
             return res.status(400).json({
+                ok: false,
                 msg: 'Usuario / Password no son correctos - estado: false'
             });
         }
@@ -27,6 +29,7 @@ const loginAdmin = async(req, res = response) => {
         // Verificar si es Admin
         if ( usuario.rol !== 'ADMIN_ROLE' ) {
             return res.status(401).json({
+                ok: false,
                 msg: `${ usuario.nombre } no es administrador - No puede iniciar sesión aquí`
             });
         }
@@ -35,6 +38,7 @@ const loginAdmin = async(req, res = response) => {
         const validPassword = bcryptjs.compareSync( password, usuario.password );
         if ( !validPassword ) {
             return res.status(400).json({
+                ok: false,
                 msg: 'Usuario / Password no son correctos - password'
             });
         }
@@ -43,6 +47,7 @@ const loginAdmin = async(req, res = response) => {
         const token = await generarJWT( usuario.id );
 
         res.json({
+            ok: true,
             usuario,
             token
         })
@@ -50,6 +55,7 @@ const loginAdmin = async(req, res = response) => {
     } catch (error) {
         console.log(error)
         res.status(500).json({
+            ok: false,
             msg: 'Hable con el administrador'
         });
     }   
@@ -73,6 +79,7 @@ const adminPost = async(req, res = response) => {
         const token = await generarJWT( usuario.id );
     
         res.json({
+            ok: true,
             usuario,
             token
         });
@@ -80,6 +87,7 @@ const adminPost = async(req, res = response) => {
     } catch (error) {
         console.log(error)
         res.status(500).json({
+            ok: false,
             msg: 'Hable con el administrador'
         });
     }  
@@ -91,7 +99,10 @@ const adminDelete = async(req, res = response) => {
     const usuario = await Usuario.findByIdAndUpdate( id, { estado: false } );
 
     
-    res.json(usuario);
+    res.json({
+        ok: true,
+        usuario
+    });
 }
 
 
