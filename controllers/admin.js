@@ -105,9 +105,39 @@ const adminDelete = async(req, res = response) => {
     });
 }
 
+const obtenerUsuario = async(req, res = response ) => {
+
+    const { id } = req.params;
+    const usuarioRol = req.usuario.rol
+
+    if ( usuarioRol !== 'ADMIN_ROLE'){
+        return res.status(401).json({
+            ok: false,
+            msg: `Eres ${usuarioRol} no tienes autorización`
+        });
+    }
+
+    const usuario = await Usuario.findById( id )
+    
+    if ( !usuario.estado ) {
+        return res.status(400).json({
+            ok: false,
+            msg: 'Usuario no se encuentra - estado: false'
+        });
+    }
+
+    res.json({
+        ok: true,
+        usuario 
+    });
+}
+
+
+
 
 module.exports = {
     adminPost,
     adminDelete,
-    loginAdmin
+    loginAdmin,
+    obtenerUsuario
 }

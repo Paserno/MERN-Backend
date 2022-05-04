@@ -9,10 +9,10 @@ const {
     tieneRole
 } = require('../middlewares');
 
-const { esRoleValido, emailExiste, existeUsuarioPorId } = require('../helpers/db-validators');
+const { emailExiste, existeUsuarioPorId , existeJardineroPorId} = require('../helpers/db-validators');
 const { usuariosGet } = require('../controllers/usuarios');
-const { adminPost, adminDelete, loginAdmin } = require('../controllers/admin');
-const { obtenerJardineros, crearJardinero } = require('../controllers/jardin');
+const { adminPost, adminDelete, loginAdmin, obtenerUsuario } = require('../controllers/admin');
+const { obtenerJardineros, crearJardinero, obtenerJardinero } = require('../controllers/jardin');
 
 
 const router = Router();
@@ -20,6 +20,20 @@ const router = Router();
 
 router.get('/', usuariosGet );
 router.get('/jardin', obtenerJardineros );
+
+router.get('/:id',[
+    validarJWT,
+    check('id', 'No es un id de Mongo válido').isMongoId(),
+    check('id').custom( existeUsuarioPorId ),
+    validarCampos,
+], obtenerUsuario );
+
+router.get('/jardin/:usuario',[
+    validarJWT,
+    check('usuario', 'No es un id de Mongo válido').isMongoId(),
+    // check('usuario').custom( existeJardineroPorId ),
+    validarCampos,
+], obtenerJardinero );
 
 router.post('/login',[
     check('correo', 'El correo es obligatorio').isEmail(),
