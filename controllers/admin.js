@@ -132,6 +132,18 @@ const obtenerUsuario = async(req, res = response ) => {
     });
 }
 
+const validarTokenAdmin = async (req, res = response ) => {
+
+    // Generar el JWT
+    const token = await generarJWT( req.usuario._id );
+    
+    res.json({
+        ok: true,
+        usuario: req.usuario,
+        token: token,
+    })
+
+}
 
 
 
@@ -139,5 +151,6 @@ module.exports = {
     adminPost,
     adminDelete,
     loginAdmin,
-    obtenerUsuario
+    obtenerUsuario,
+    validarTokenAdmin
 }

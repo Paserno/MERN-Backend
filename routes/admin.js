@@ -11,12 +11,15 @@ const {
 
 const { emailExiste, existeUsuarioPorId , existeJardineroPorId} = require('../helpers/db-validators');
 const { usuariosGet } = require('../controllers/usuarios');
-const { adminPost, adminDelete, loginAdmin, obtenerUsuario } = require('../controllers/admin');
+const { adminPost, adminDelete, loginAdmin, obtenerUsuario, validarTokenAdmin } = require('../controllers/admin');
 const { obtenerJardineros, crearJardinero, obtenerJardinero } = require('../controllers/jardin');
 
 
 const router = Router();
 
+router.get('/renew',[
+    validarJWT
+], validarTokenAdmin );
 
 router.get('/', usuariosGet );
 router.get('/jardin', obtenerJardineros );
