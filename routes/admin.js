@@ -9,9 +9,9 @@ const {
     tieneRole
 } = require('../middlewares');
 
-const { emailExiste, existeUsuarioPorId , existeJardineroPorId} = require('../helpers/db-validators');
+const { emailExiste, existeUsuarioPorId , esRoleValido} = require('../helpers');
 const { usuariosGet } = require('../controllers/usuarios');
-const { adminPost, adminDelete, loginAdmin, obtenerUsuario, validarTokenAdmin } = require('../controllers/admin');
+const { adminPost, adminDelete, loginAdmin, obtenerUsuario, validarTokenAdmin, editarRol } = require('../controllers/admin');
 const { obtenerJardineros, crearJardinero, obtenerJardinero } = require('../controllers/jardin');
 
 
@@ -56,6 +56,15 @@ router.post('/',[
     // check('rol').custom( esRoleValido ), 
     validarCampos
 ], adminPost)
+
+router.put('/:id',[
+    validarJWT,
+    esAdminRole,
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom( existeUsuarioPorId ),
+    check('rol').custom( esRoleValido ), 
+    validarCampos
+],editarRol );
 
 router.delete('/:id',[
     validarJWT,

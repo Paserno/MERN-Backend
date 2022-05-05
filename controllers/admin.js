@@ -93,6 +93,20 @@ const adminPost = async(req, res = response) => {
     }  
 }
 
+const editarRol = async(req, res = response) => {
+
+    const { id } = req.params;
+    const { _id, password, google, correo, ...resto } = req.body;
+
+
+    const usuario = await Usuario.findByIdAndUpdate( id, resto, {new: true});
+
+    res.json({
+        ok: true,
+        usuario
+    });
+}
+
 const adminDelete = async(req, res = response) => {
 
     const { id } = req.params;
@@ -152,5 +166,6 @@ module.exports = {
     adminDelete,
     loginAdmin,
     obtenerUsuario,
-    validarTokenAdmin
+    validarTokenAdmin,
+    editarRol
 }
