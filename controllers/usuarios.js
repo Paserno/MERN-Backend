@@ -20,6 +20,7 @@ const usuariosGet = async(req = request, res = response) => {
     ]);
 
     res.json({
+        ok:true,
         total,
         usuarios
     });
