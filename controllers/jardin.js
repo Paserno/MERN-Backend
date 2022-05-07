@@ -55,6 +55,21 @@ const crearJardinero = async(req, res = response) => {
     }  
 }
 
+const actualizarJardinero = async(req, res = response) => {
+
+    const { id } = req.params;
+    const { _id, usuario, ...resto } = req.body;
+
+
+    const jarinero = await Jardinero.findByIdAndUpdate( id, resto, {new: true}).populate('usuario', 'nombre');
+    
+
+    res.json({
+        ok: true,
+        jarinero
+    });
+}
+
 const obtenerJardinero = async(req, res = response ) => {
 
     const { usuario } = req.params;
@@ -95,4 +110,5 @@ module.exports = {
     obtenerJardineros,
     crearJardinero,
     obtenerJardinero,
+    actualizarJardinero
 }
