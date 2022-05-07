@@ -85,8 +85,10 @@ router.delete('/:id',[
 
 
 router.post('/jardinero',[
+    validarJWT,
+    esAdminRole,
     check('usuario','No es un id de Mongo').isMongoId(),
-    check('especialidad', 'La dirección es obligatoria').not().isEmpty(),
+    check('especialidad', 'La especialidad es obligatoria').not().isEmpty(),
     validarCampos
 ], crearJardinero)
 
