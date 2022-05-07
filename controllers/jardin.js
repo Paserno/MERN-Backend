@@ -25,7 +25,7 @@ const obtenerJardineros = async(req, res = response ) => {
 
 const crearJardinero = async(req, res = response) => {
     
-    const { usuario, especialidad, descripcion} = req.body;
+    const { usuario, especialidad, descripcion, activo} = req.body;
     try {
 
         const [jardineroDB] = await Jardinero.find({ usuario: usuario });
@@ -37,7 +37,7 @@ const crearJardinero = async(req, res = response) => {
             });
         }
 
-        const jardinero = new Jardinero({ usuario, especialidad, descripcion });
+        const jardinero = new Jardinero({ usuario, especialidad, descripcion, activo });
         // Guardar en BD
         await jardinero.save();
 
@@ -67,8 +67,16 @@ const obtenerJardinero = async(req, res = response ) => {
         });
     }
 
+
     const [jardinero] = await Jardinero.find({ usuario: usuario }).populate('usuario', 'nombre')
     
+    if(!jardinero){
+        return res.status(200).json({
+            ok: false,
+            msg: 'No Existe Registro'
+        })
+    }
+
     if ( !jardinero.estado ) {
         return res.status(400).json({
             ok: false,
