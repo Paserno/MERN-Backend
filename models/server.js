@@ -4,7 +4,8 @@ const fileUpload = require('express-fileupload');
 const { createServer } = require('http');
 
 const { dbConnection } = require('../database/config');
-const { socketController } = require('../sockets/controller');
+// const { socketController } = require('../sockets/controller');
+const Sockets = require('./sockets');
 
 class Server {
 
@@ -22,7 +23,9 @@ class Server {
             productos:  '/api/productos',
             usuarios:   '/api/usuarios',
             uploads:    '/api/uploads',
-            admin:      '/api/admin'
+            admin:      '/api/admin',
+            jardin:      '/api/jardin',
+            mensajes:      '/api/mensajes',
         }
 
 
@@ -36,7 +39,8 @@ class Server {
         this.routes();
 
         // Sockets
-        this.sockets();
+        this.configurarSockets()
+        // this.sockets();
     }
 
     async conectarDB() {
@@ -72,14 +76,20 @@ class Server {
         this.app.use( this.paths.productos,  require('../routes/productos'));
         this.app.use( this.paths.usuarios,   require('../routes/usuarios'));
         this.app.use( this.paths.admin,      require('../routes/admin'));
+        this.app.use( this.paths.jardin,     require('../routes/jardineros'));
         this.app.use( this.paths.uploads,    require('../routes/uploads'));
+        this.app.use( this.paths.mensajes,   require('../routes/mensajes'));
         
     }
 
-    sockets(){
-        this.io.on('connection',(socket) =>  socketController(socket, this.io ))
 
-    };
+    configurarSockets() {
+        new Sockets(this.io);
+    }
+    // sockets(){
+    //     this.io.on('connection',(socket) =>  socketController(socket, this.io ))
+
+    // };
 
     listen() {
         this.server.listen( this.port, () => {

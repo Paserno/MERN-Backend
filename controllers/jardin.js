@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { Jardinero } = require('../models');
+const { Jardinero, Usuario } = require('../models');
 
 
 const obtenerJardineros = async(req, res = response ) => {
@@ -105,10 +105,57 @@ const obtenerJardinero = async(req, res = response ) => {
     });
 }
 
+const obtenerJardinerosActivos = async( req, res = response) => {
+
+    // const { limite = 5, desde = 0 } = req.query;
+    // const query = { rol: 'OTRO_ROLE', estado: true};
+    const usuarios = await Usuario.aggregate(
+        [
+            {
+                $lookup:
+                {
+                    from: "jardineros",
+                    localField: "_id",
+                    foreignField: "usuario",
+                    as: 'jardinero'
+                }
+            },
+            { $unwind: "$jardinero" },
+            { $match: { 
+                "estado": true, 
+                "jardinero.activo": true,
+                "jardinero.estado": true,
+                },
+            },
+            {
+                $project: {
+                    password: 0,
+                    __v: 0,
+                    "jardinero.__v":0
+                }
+            }
+        ])
+
+
+    // const [ total, usuarios ] = await Promise.all([
+    //     Usuario.countDocuments(query),
+    //     Usuario.find(query)
+    //         .skip( Number( desde ) )
+    //         .limit(Number( limite ))
+    // ]);
+
+    res.json({
+        ok:true,
+        // total,
+        // usuarios
+        usuarios,
+    });
+}
 
 module.exports = {
     obtenerJardineros,
     crearJardinero,
     obtenerJardinero,
-    actualizarJardinero
+    actualizarJardinero,
+    obtenerJardinerosActivos
 }
