@@ -109,7 +109,7 @@ const obtenerJardinerosActivos = async( req, res = response) => {
 
     // const { limite = 5, desde = 0 } = req.query;
     // const query = { rol: 'OTRO_ROLE', estado: true};
-    const usuarios = await Usuario.aggregate(
+    const [ usuarios, totales ] = await Promise.all([ Usuario.aggregate(
         [
             {
                 $lookup:
@@ -125,6 +125,7 @@ const obtenerJardinerosActivos = async( req, res = response) => {
                 "estado": true, 
                 "jardinero.activo": true,
                 "jardinero.estado": true,
+                "rol": "OTRO_ROLE"
                 },
             },
             {
@@ -134,20 +135,45 @@ const obtenerJardinerosActivos = async( req, res = response) => {
                     "jardinero.__v":0
                 }
             }
+        ]), Usuario.aggregate(
+            [
+                {
+                    $lookup:
+                    {
+                        from: "jardineros",
+                        localField: "_id",
+                        foreignField: "usuario",
+                        as: 'jardinero'
+                    }
+                },
+                { $unwind: "$jardinero" },
+                { $match: { 
+                    "estado": true, 
+                    "jardinero.activo": true,
+                    "jardinero.estado": true,
+                    "rol": "OTRO_ROLE"
+                    },
+                },
+                {
+                    $project: {
+                        password: 0,
+                        __v: 0,
+                        "jardinero.__v":0
+                    }
+                },
+                {
+                    $count: "total"
+                },
+
         ])
+    ])
+    const [ contador ] = totales; 
+    const { total } = contador 
 
-
-    // const [ total, usuarios ] = await Promise.all([
-    //     Usuario.countDocuments(query),
-    //     Usuario.find(query)
-    //         .skip( Number( desde ) )
-    //         .limit(Number( limite ))
-    // ]);
 
     res.json({
         ok:true,
-        // total,
-        // usuarios
+        total,
         usuarios,
     });
 }
