@@ -1,4 +1,4 @@
-const { Mensaje } = require('../models');
+const Mensaje = require('../models/mensaje');
 
 
 
@@ -6,13 +6,13 @@ const obtenerChat = async (req, res) => {
 
 
 
-    const { _id: miId }  = req.usuario;
+    const { _id }  = req.usuario;
     const mensajesDe = req.params.de;
     try {
         const last30 = await Mensaje.find({
             $or: [
-                { de: miId, para: mensajesDe },
-                { de: mensajesDe, para: miId },
+                { de: _id, para: mensajesDe },
+                { de: mensajesDe, para: _id },
             ]
         })
             .sort({ createdAt: 'asc' })
