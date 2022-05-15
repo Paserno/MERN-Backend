@@ -7,7 +7,6 @@ const Role      = require('./role');
 const Server    = require('./server');
 const Usuario   = require('./usuario');
 const Jardinero = require('./jardinero');
-const Mensaje   = require('./mensaje');
 
 
 
@@ -20,6 +19,5 @@ module.exports = {
     Server,
     Usuario,
     Jardinero,
-    Mensaje
 }
 

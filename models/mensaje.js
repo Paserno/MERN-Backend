@@ -15,7 +15,7 @@ const MensajeSchema = Schema({
     },
     mensaje: {
         type: String,
-        requiered: true
+        required: true
     }
 },{
     timestamps: true

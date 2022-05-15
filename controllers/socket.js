@@ -1,9 +1,7 @@
-const Usuario = require('../models/');
-const Mensaje = require('../models/');
+const Mensaje = require('../models/mensaje');
 
 const grabarMensaje = async(payload)=> {
     try {
-
         const mensaje = new Mensaje(payload);
         await mensaje.save();
         return mensaje;
@@ -11,6 +9,8 @@ const grabarMensaje = async(payload)=> {
         console.log(error);
         return false;        
     }
+
+
 }
 
 module.exports = {
