@@ -14,23 +14,31 @@ class Sockets {
     socketEvents(){
         // on connection
         this.io.on('connection', async( socket ) => {
+
+            
             const usuario = await comprobarJWT(socket.handshake.headers['x-token']);
             if ( !usuario ){
                 console.log('socket no identificado');
                 return socket.disconnect();
             }
+
             const miId   = usuario._id;
-            // console.log(usuario)
+            const id = JSON.stringify(miId);
 
-            socket.join(miId);
-            
 
+            socket.join(id);
+
+            // Escucha cuando el cliente manda un mensaje
             socket.on('mensaje-personal', async(payload)=>{
-                // console.log(payload);
+                console.log(payload);
                
                 const mensaje = await grabarMensaje(payload);
-                this.io.to(payload.para).emit('mensaje-personal', mensaje);
-                this.io.to(payload.de).emit('mensaje-personal', mensaje);
+                payload.de = JSON.stringify(payload.de)
+                payload.para = JSON.stringify(payload.para)
+               
+                
+                this.io.to(payload.para).emit('recibir-mensajes', mensaje);
+                this.io.to(payload.de).emit('recibir-mensajes', mensaje);
             });
 
         })

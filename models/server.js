@@ -39,7 +39,7 @@ class Server {
         this.routes();
 
         // Sockets
-        this.configurarSockets()
+        // this.configurarSockets()
         // this.sockets();
     }
 
@@ -92,6 +92,9 @@ class Server {
     // };
 
     listen() {
+        
+        this.configurarSockets();
+
         this.server.listen( this.port, () => {
             console.log('Servidor corriendo en puerto', this.port );
         });
