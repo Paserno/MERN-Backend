@@ -30,7 +30,6 @@ class Sockets {
 
             // Escucha cuando el cliente manda un mensaje
             socket.on('mensaje-personal', async(payload)=>{
-                console.log(payload);
                
                 const mensaje = await grabarMensaje(payload);
                 payload.de = JSON.stringify(payload.de)
