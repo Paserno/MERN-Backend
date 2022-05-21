@@ -1,4 +1,6 @@
+const bcryptjs = require('bcryptjs');
 const { response } = require('express');
+const { generarJWT } = require('../helpers');
 const { Jardinero, Usuario } = require('../models');
 
 
@@ -178,10 +180,69 @@ const obtenerJardinerosActivos = async( req, res = response) => {
     });
 }
 
+const loginJardin = async(req, res = response) => {
+
+    const { correo, password } = req.body;
+    try {
+        // Verificar si el email existe
+        const usuario = await Usuario.findOne({ correo });
+        if ( !usuario ) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'Usuario / Password no son correctos - correo'
+            });
+        }
+
+        // SI el usuario está activo
+        if ( !usuario.estado ) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'Usuario / Password no son correctos - estado: false'
+            });
+        }
+        
+        // Verificar la contraseña
+        const validPassword = bcryptjs.compareSync( password, usuario.password );
+        if ( !validPassword ) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'Usuario / Password no son correctos - password'
+            });
+        }
+
+        // Verificar si es usuario
+        if ( usuario.rol === 'USER_ROLE' ) {
+            return res.status(401).json({
+                ok: false,
+                msg: `${ usuario.nombre } no es un rol permitido - No puede iniciar sesión aquí`
+            });
+        }
+
+
+        // Generar el JWT
+        const token = await generarJWT( usuario.id );
+
+        res.json({
+            ok: true,
+            usuario,
+            token
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador'
+        });
+    }   
+
+}
+
 module.exports = {
     obtenerJardineros,
     crearJardinero,
     obtenerJardinero,
     actualizarJardinero,
-    obtenerJardinerosActivos
+    obtenerJardinerosActivos,
+    loginJardin
 }

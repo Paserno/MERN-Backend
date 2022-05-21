@@ -26,14 +26,6 @@ const loginAdmin = async(req, res = response) => {
             });
         }
 
-        // Verificar si es Admin
-        if ( usuario.rol !== 'ADMIN_ROLE' ) {
-            return res.status(401).json({
-                ok: false,
-                msg: `${ usuario.nombre } no es administrador - No puede iniciar sesión aquí`
-            });
-        }
-
         // Verificar la contraseña
         const validPassword = bcryptjs.compareSync( password, usuario.password );
         if ( !validPassword ) {
@@ -42,6 +34,16 @@ const loginAdmin = async(req, res = response) => {
                 msg: 'Usuario / Password no son correctos - password'
             });
         }
+
+        // Verificar si es Admin
+        if ( usuario.rol !== 'ADMIN_ROLE' ) {
+            return res.status(401).json({
+                ok: false,
+                msg: `${ usuario.nombre } no es administrador - No puede iniciar sesión aquí`
+            });
+        }
+
+        
 
         // Generar el JWT
         const token = await generarJWT( usuario.id );
