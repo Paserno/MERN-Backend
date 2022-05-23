@@ -107,6 +107,25 @@ const obtenerDetalleSolicitud = async( req, res = response ) => {
 
 }
 
+const obtenerDetalleSoli = async( req, res = response) => {
+
+    const { id } = req.params;
+    
+    const detalleSolicitud = await DetalleSolicitud.findById( id ).populate('idTipoServicio', 'nombre');
+    
+    if ( !detalleSolicitud.estado ) {
+        return res.status(400).json({
+            ok: false,
+            msg: 'El Detalle Servicio no se encuentra - estado: false'
+        });
+    }
+
+    res.json({
+        ok: true,
+        detalleSolicitud 
+    });
+}
+
 const crearDetalleSolicitud = async( req, res = response ) => {
     
     const { ...data } = req.body;
@@ -204,5 +223,6 @@ module.exports = {
     crearDetalleSolicitud,
     obtenerDetalleSolicitud,
     actualizarDetalleSolicitud,
-    eliminarDetalleSolicitud
+    eliminarDetalleSolicitud,
+    obtenerDetalleSoli,
 }
