@@ -12,12 +12,17 @@ const TipoServicioSchema = Schema({
         required: false,
         default: 0,
     },
+    estado: {
+        type: Boolean,
+        required: true,
+        default: true,
+    }
     
 })
 
 
 TipoServicioSchema.methods.toJSON = function() {
-    const { __v, ...data  } = this.toObject();
+    const { __v, estado, ...data  } = this.toObject();
     return data;
 }
 

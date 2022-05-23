@@ -24,7 +24,6 @@ const obtenerSolicitudes = async(req, res = response ) => {
     });
 }
 
-
 const crearSolicitud = async(req, res = response ) => {
 
     const { ...body } = req.body;
@@ -68,6 +67,13 @@ const actualizarSolicitud = async( req, res = response ) => {
 
 }
 
+const obtenerDetalleSolicitud = async( req, res = response ) => {
+
+}
+
+const crearDetalleSolicitud = async( req, res = response ) => {
+    
+}
 
 module.exports = {
     obtenerSolicitudes,

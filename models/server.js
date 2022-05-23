@@ -26,7 +26,8 @@ class Server {
             admin:      '/api/admin',
             jardin:     '/api/jardin',
             mensajes:   '/api/mensajes',
-            solicitud:  '/api/soli'
+            solicitud:  '/api/soli',
+            tipoServicio:  '/api/tipo'
         }
 
 
@@ -81,6 +82,7 @@ class Server {
         this.app.use( this.paths.uploads,    require('../routes/uploads'));
         this.app.use( this.paths.mensajes,   require('../routes/mensajes'));
         this.app.use( this.paths.solicitud,  require('../routes/solicitud'));
+        this.app.use( this.paths.tipoServicio,  require('../routes/tipoServicio'));
         
     }
 
