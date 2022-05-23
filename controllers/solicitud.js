@@ -2,6 +2,7 @@ const { response } = require('express');
 const { Jardinero } = require('../models');
 const DetalleSolicitud = require('../models/detalleSolicitud');
 const Solicitud = require('../models/solicitud');
+const TipoServicio = require('../models/tipoServicio');
 
 // ------------------------- Solicitud -----------------------------
 
@@ -75,6 +76,35 @@ const actualizarSolicitud = async( req, res = response ) => {
 
 const obtenerDetalleSolicitud = async( req, res = response ) => {
 
+    const { idSolicitud } = req.params;
+
+    const solicitud = await Solicitud.findById( idSolicitud )
+                                        .populate('idUsuario', 'nombre apellido correo')
+    
+    const detalleSolicitud = await DetalleSolicitud.find({ idSolicitud: idSolicitud, estado: true }).populate('idTipoServicio', 'nombre')
+
+    if(!solicitud){
+        return res.status(200).json({
+            ok: false,
+            msg: 'No Existe Solicitud'
+        })
+    }
+    
+    if(detalleSolicitud.length === 0){
+        return res.status(200).json({
+            ok: true,
+            solicitud,
+            msg: 'No Existe Detalles Solicitud ',
+            detalleSolicitud,
+        })
+    }
+
+    res.json({
+        ok: true,
+        solicitud,
+        detalleSolicitud 
+    });
+
 }
 
 const crearDetalleSolicitud = async( req, res = response ) => {
@@ -102,9 +132,77 @@ const crearDetalleSolicitud = async( req, res = response ) => {
     
 }
 
+const actualizarDetalleSolicitud = async( req, res = response) => {
+
+    const { id } = req.params;
+    const { estado, idSolicitud, idTipoServicio, ...body } = req.body;
+    let data = {
+        ...body
+    }
+    try {
+        if ( idTipoServicio) {
+            const existeTipoServicio = await TipoServicio.findById(idTipoServicio);
+
+            if ( !existeTipoServicio ) {
+                return res.status(404).json({
+                    ok: false,
+                    msg: `No se encuentra idTipoServicio: ${ idTipoServicio }`
+                });
+            }
+
+            data = {
+                ...body,
+                idTipoServicio: idTipoServicio
+            }
+        }
+        
+        const detalleSolicitud = await DetalleSolicitud.findByIdAndUpdate(id, data, { new: true }).populate('idTipoServicio', 'nombre');
+    
+        return res.status(200).json({
+            ok: true,
+            detalleSolicitud
+        });
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hablar con el Administrador'
+        });
+    }
+    
+
+}
+
+const eliminarDetalleSolicitud = async( req, res = response) => {
+
+    const { id } = req.params;
+
+    try {
+
+    const detalleServicio = await DetalleSolicitud.findByIdAndUpdate( id, { estado: false }, { new: true } );
+
+    res.status(200).json({
+        ok: true,
+        detalleServicio
+    });
+
+} catch (error) {
+    console.log(error);
+    res.status(500).json({
+        ok: false,
+        msg: 'Hablar con el administrador'
+    });
+}
+    
+}
+
 module.exports = {
     obtenerSolicitudes,
     crearSolicitud,
     actualizarSolicitud,
-    crearDetalleSolicitud
+    crearDetalleSolicitud,
+    obtenerDetalleSolicitud,
+    actualizarDetalleSolicitud,
+    eliminarDetalleSolicitud
 }

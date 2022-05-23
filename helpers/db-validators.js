@@ -2,6 +2,7 @@ const Role = require('../models/role');
 const { Usuario, Categoria, Producto, Jardinero } = require('../models');
 const Solicitud = require('../models/solicitud');
 const TipoServicio = require('../models/tipoServicio');
+const DetalleSolicitud = require('../models/detalleSolicitud');
 
 
 const esRoleValido = async(rol = 'USER_ROLE') => {
@@ -46,6 +47,16 @@ const existeSolicitudPorId = async( id ) => {
     if ( !existeSolicitud ) {
         console.log('hola')
         throw new Error(`El idSolicitud no existe ${ id } `);
+    }
+}
+
+const existeDetalleSolicitudPorId = async( id ) => {
+
+    // Verificar si la id de la solicitud existe
+    const existeDetalleSolicitud = await DetalleSolicitud.findById(id);
+    if ( !existeDetalleSolicitud ) {
+        console.log('hola')
+        throw new Error(`El id no existe ${ id } `);
     }
 }
 
@@ -105,5 +116,6 @@ module.exports = {
     coleccionesPermitidas,
     existeSolicitudPorId,
     existeTipoServicioPorId,
+    existeDetalleSolicitudPorId,
 }
 

@@ -21,6 +21,11 @@ const DetalleSolicitudSchema = Schema({
         required: true,
         default: true,
     },
+    realizado: {
+        type: Boolean,
+        required: true,
+        default: false
+    }
 });
 
 
