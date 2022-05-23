@@ -19,7 +19,7 @@ const DetalleSolicitudSchema = Schema({
     estado: {
         type: Boolean,
         required: true,
-        default: false,
+        default: true,
     },
 });
 

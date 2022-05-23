@@ -1,11 +1,12 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { crearSolicitud, actualizarSolicitud, obtenerSolicitudes } = require('../controllers/solicitud');
-const { existeJardineroPorId } = require('../helpers');
+const { crearSolicitud, actualizarSolicitud, obtenerSolicitudes, crearDetalleSolicitud } = require('../controllers/solicitud');
+const { existeJardineroPorId, existeSolicitudPorId, existeTipoServicioPorId } = require('../helpers');
 const { validarCampos, validarJWT } = require('../middlewares');
 
 const router = Router();
 
+// ------------------------- Solicitud -----------------------------
 
 router.get('/', [
     validarJWT
@@ -26,6 +27,17 @@ router.put('/:id', [
     validarCampos,
 ], actualizarSolicitud )
 
+// ------------------------- Detalle Solicitud -----------------------------
+
+router.post('/detalle/', [
+    validarJWT,
+    check('idSolicitud', 'No es un ID válido').isMongoId(),
+    check('idSolicitud').custom( existeSolicitudPorId ),
+    check('idTipoServicio', 'No es un ID válido').isMongoId(),
+    check('idTipoServicio').custom( existeTipoServicioPorId ),
+    validarCampos,
+
+], crearDetalleSolicitud)
 
 
 module.exports = router;

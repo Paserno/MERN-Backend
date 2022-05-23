@@ -1,6 +1,9 @@
 const { response } = require('express');
 const { Jardinero } = require('../models');
+const DetalleSolicitud = require('../models/detalleSolicitud');
 const Solicitud = require('../models/solicitud');
+
+// ------------------------- Solicitud -----------------------------
 
 
 const obtenerSolicitudes = async(req, res = response ) => {
@@ -67,11 +70,35 @@ const actualizarSolicitud = async( req, res = response ) => {
 
 }
 
+// ------------------------- Detalle Solicitud -----------------------------
+
+
 const obtenerDetalleSolicitud = async( req, res = response ) => {
 
 }
 
 const crearDetalleSolicitud = async( req, res = response ) => {
+    
+    const { ...data } = req.body;
+    try {
+        const nuevaDetalleSoliticud = new DetalleSolicitud( data );
+
+        const detalleSolicitud = await nuevaDetalleSoliticud.save();
+
+        res.status(201).json({
+            ok: true,
+            detalleSolicitud
+        });
+
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hablar con el Administrador'
+        });
+    }
+
     
 }
 
@@ -79,4 +106,5 @@ module.exports = {
     obtenerSolicitudes,
     crearSolicitud,
     actualizarSolicitud,
+    crearDetalleSolicitud
 }

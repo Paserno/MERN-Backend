@@ -21,6 +21,26 @@ const obtenerTipoServicios = async(req, res = response ) => {
     });
 }
 
+const obtenerTipoServi = async(req, res = response ) => {
+
+    const { id } = req.params;
+    
+
+    const tipoServicio = await TipoServicio.findById( id )
+    
+    if ( !tipoServicio.estado ) {
+        return res.status(400).json({
+            ok: false,
+            msg: 'El Servicio no se encuentra - estado: false'
+        });
+    }
+
+    res.json({
+        ok: true,
+        tipoServicio 
+    });
+}
+
 const crearTipoServicio = async(req, res = response) => {
 
     const { nombre, tarifa } = req.body;
@@ -92,6 +112,7 @@ const eliminarTipoServicio = async( req, res = response ) => {
 module.exports = {
     crearTipoServicio,
     obtenerTipoServicios,
+    obtenerTipoServi,
     actualizarTipoServicio,
     eliminarTipoServicio,
 }
