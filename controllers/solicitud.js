@@ -28,6 +28,30 @@ const obtenerSolicitudes = async(req, res = response ) => {
     });
 }
 
+const obtenerSolicitudesByJardinero = async( req, res = response) => {
+
+    const { idJardinero } = req.params;
+    const { limite = 5, desde = 0 } = req.query;
+
+
+    const [ total, solicitudes ] = await Promise.all([
+        Solicitud.countDocuments( {idJardinero} ),
+        Solicitud.find( {idJardinero} )
+            .populate('idUsuario', 'nombre apellido correo rol ciudad direccion')
+            .skip( Number( desde ) )
+            .limit(Number( limite ))
+    ]);
+    
+    
+
+    res.json({
+        ok: true,
+        total,
+        solicitudes 
+    });
+
+}
+
 const crearSolicitud = async(req, res = response ) => {
 
     const { ...body } = req.body;
@@ -225,4 +249,5 @@ module.exports = {
     actualizarDetalleSolicitud,
     eliminarDetalleSolicitud,
     obtenerDetalleSoli,
+    obtenerSolicitudesByJardinero,
 }
