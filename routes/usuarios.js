@@ -1,4 +1,6 @@
-
+/*
+    Path: /api/usuarios/soli
+*/
 const { Router } = require('express');
 const { check } = require('express-validator');
 
@@ -10,11 +12,12 @@ const {
 } = require('../middlewares');
 
 
-const { esRoleValido, emailExiste, existeUsuarioPorId } = require('../helpers/db-validators');
+const { esRoleValido, emailExiste, existeUsuarioPorId, existeJardineroPorId } = require('../helpers/db-validators');
 
 const { usuariosGet,
         usuariosPut,
-        usuariosPost,} = require('../controllers/usuarios');
+        usuariosPost,
+        solicitudPendiente,} = require('../controllers/usuarios');
 
 const router = Router();
 
@@ -51,7 +54,12 @@ router.post('/',[
 //     validarCampos
 // ],usuariosDelete );
 
-
+router.get('/soli/:idJardinero', [
+    validarJWT,
+    check('idJardinero', 'No es un ID válido').isMongoId(),
+    check('idJardinero').custom( existeJardineroPorId ),
+    validarCampos
+], solicitudPendiente);
 
 
 

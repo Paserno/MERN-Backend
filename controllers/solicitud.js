@@ -84,7 +84,7 @@ const crearSolicitud = async(req, res = response ) => {
 const actualizarSolicitud = async( req, res = response ) => {
 
     const { id } = req.params;
-    const { idUsuario, idJardinero , ...data } = req.body;
+    const { idUsuario, idJardinero, estado, ...data } = req.body;
     
     const solicitud = await Solicitud.findByIdAndUpdate(id, data, { new: true });
 
@@ -94,6 +94,8 @@ const actualizarSolicitud = async( req, res = response ) => {
     });
 
 }
+
+//TODO: Hacer Endpoit Eliminar (logica) Solicitud.
 
 // ------------------------- Detalle Solicitud -----------------------------
 

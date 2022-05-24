@@ -77,15 +77,15 @@ const obtenerJardinero = async(req, res = response ) => {
     const { usuario } = req.params;
     const usuarioRol = req.usuario.rol
 
-    if ( usuarioRol !== 'ADMIN_ROLE'){
-        return res.status(401).json({
-            ok: false,
-            msg: `Eres ${usuarioRol} no tienes autorización`
-        });
-    }
+    // if ( usuarioRol !== 'ADMIN_ROLE'){
+    //     return res.status(401).json({
+    //         ok: false,
+    //         msg: `Eres ${usuarioRol} no tienes autorización`
+    //     });
+    // }
 
 
-    const [jardinero] = await Jardinero.find({ usuario: usuario }).populate('usuario', 'nombre')
+    const [jardinero] = await Jardinero.find({ usuario: usuario }).populate('usuario', 'nombre apellido correo')
     
     if(!jardinero){
         return res.status(200).json({

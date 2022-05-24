@@ -4,6 +4,7 @@ const bcryptjs = require('bcryptjs');
 
 const Usuario = require('../models/usuario');
 const { generarJWT } = require('../helpers');
+const Solicitud = require('../models/solicitud');
 
 
 
@@ -64,14 +65,30 @@ const usuariosPut = async(req, res = response) => {
 }
 
 
-// const usuariosDelete = async(req, res = response) => {
+// --------------- Solicitud Pendiente --------------------
 
-//     const { id } = req.params;
-//     const usuario = await Usuario.findByIdAndUpdate( id, { estado: false } );
+const solicitudPendiente = async( req, res = response) => {
 
+
+    const { idJardinero } = req.params;
+    const uid  = req.usuario._id; 
+    query = { estado:true, idUsuario: uid, idJardinero, finish: false }
+
+    // Obtienes la solicitud pendiente de parte del usuario con un Jardinero.
+    const [solicitud] = await Solicitud.find( query );
+
+    if (!solicitud){
+        return res.json({
+            ok: false,
+            msg: 'No existen solicitudes asociadas'
+        })
+    }
     
-//     res.json(usuario);
-// }
+    res.json({
+        ok:true,
+        solicitud
+    });
+}
 
 
 
@@ -80,5 +97,6 @@ module.exports = {
     usuariosGet,
     usuariosPost,
     usuariosPut,
+    solicitudPendiente,
     // usuariosDelete,
 }

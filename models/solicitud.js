@@ -26,6 +26,11 @@ const SolicitudSchema = Schema({
         required: true,
         default: false,
     },
+    estado: {
+        type: Boolean,
+        requiered: true,
+        default: true
+    }
 },{
     timestamps: true
 });

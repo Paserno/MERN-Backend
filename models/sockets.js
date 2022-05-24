@@ -15,7 +15,7 @@ class Sockets {
         // on connection
         this.io.on('connection', async( socket ) => {
 
-            
+
             const usuario = await comprobarJWT(socket.handshake.headers['x-token']);
             if ( !usuario ){
                 console.log('socket no identificado');
@@ -36,8 +36,8 @@ class Sockets {
                 payload.para = JSON.stringify(payload.para)
                
                 
-                this.io.to(payload.para).emit('recibir-mensajes', mensaje);
-                this.io.to(payload.de).emit('recibir-mensajes', mensaje);
+                this.io.to(payload.para).emit('mensaje-personal', mensaje);
+                this.io.to(payload.de).emit('mensaje-personal', mensaje);
             });
 
         })
