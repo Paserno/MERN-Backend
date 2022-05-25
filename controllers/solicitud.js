@@ -10,10 +10,12 @@ const TipoServicio = require('../models/tipoServicio');
 const obtenerSolicitudes = async(req, res = response ) => {
 
     const { limite = 5, desde = 0 } = req.query;
+    const query = { estado: true };
+
 
     const [ total, solicitudes ] = await Promise.all([
-        Solicitud.countDocuments(),
-        Solicitud.find()
+        Solicitud.countDocuments(query),
+        Solicitud.find(query)
             // .populate({ path: 'idUsuario', model: Usuario })
             .populate({ path: 'idJardinero', model: Jardinero })
             .populate('idUsuario', 'nombre apellido correo')
@@ -95,7 +97,27 @@ const actualizarSolicitud = async( req, res = response ) => {
 
 }
 
-//TODO: Hacer Endpoit Eliminar (logica) Solicitud.
+const eliminarSolicitud = async( req, res = response) => {
+
+    const { id } = req.params;
+
+    try {
+
+    const solicitud = await Solicitud.findByIdAndUpdate( id, { estado: false }, { new: true } );
+
+    res.status(200).json({
+        ok: true,
+        solicitud
+    });
+
+} catch (error) {
+    console.log(error);
+    res.status(500).json({
+        ok: false,
+        msg: 'Hablar con el administrador'
+    });
+}
+}
 
 // ------------------------- Detalle Solicitud -----------------------------
 
@@ -247,6 +269,7 @@ module.exports = {
     crearSolicitud,
     actualizarSolicitud,
     crearDetalleSolicitud,
+    eliminarSolicitud,
     obtenerDetalleSolicitud,
     actualizarDetalleSolicitud,
     eliminarDetalleSolicitud,

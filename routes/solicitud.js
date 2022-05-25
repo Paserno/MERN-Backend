@@ -1,8 +1,9 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { crearSolicitud, actualizarSolicitud, obtenerSolicitudes, crearDetalleSolicitud, obtenerDetalleSolicitud, actualizarDetalleSolicitud, eliminarDetalleSolicitud, obtenerDetalleSoli, obtenerSolicitudesByJardinero } = require('../controllers/solicitud');
+const { crearSolicitud, actualizarSolicitud, obtenerSolicitudes, crearDetalleSolicitud, obtenerDetalleSolicitud, actualizarDetalleSolicitud, eliminarDetalleSolicitud, obtenerDetalleSoli, obtenerSolicitudesByJardinero, eliminarSolicitud } = require('../controllers/solicitud');
 const { existeJardineroPorId, existeSolicitudPorId, existeTipoServicioPorId, existeDetalleSolicitudPorId } = require('../helpers');
 const { validarCampos, validarJWT } = require('../middlewares');
+const { route } = require('./auth');
 
 const router = Router();
 
@@ -33,6 +34,13 @@ router.put('/:id', [
     check('confirmacion').toBoolean(),
     validarCampos,
 ], actualizarSolicitud )
+
+router.delete('/:id', [
+    validarJWT,
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom( existeSolicitudPorId ),
+    validarCampos
+], eliminarSolicitud)
 
 // ------------------------- Detalle Solicitud -----------------------------
 
