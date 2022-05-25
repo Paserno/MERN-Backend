@@ -34,11 +34,12 @@ const obtenerSolicitudesByJardinero = async( req, res = response) => {
 
     const { idJardinero } = req.params;
     const { limite = 5, desde = 0 } = req.query;
-
+    // Obtienes la solicitud de un jardinero con la idJardinero
+    const query = {idJardinero, estado: true, finish: false}
 
     const [ total, solicitudes ] = await Promise.all([
-        Solicitud.countDocuments( {idJardinero} ),
-        Solicitud.find( {idJardinero} )
+        Solicitud.countDocuments( query ),
+        Solicitud.find( query )
             .populate('idUsuario', 'nombre apellido correo rol ciudad direccion')
             .skip( Number( desde ) )
             .limit(Number( limite ))
@@ -88,7 +89,16 @@ const actualizarSolicitud = async( req, res = response ) => {
     const { id } = req.params;
     const { idUsuario, idJardinero, estado, ...data } = req.body;
     
-    const solicitud = await Solicitud.findByIdAndUpdate(id, data, { new: true });
+    const solicitud = await Solicitud.findByIdAndUpdate(id, data, { new: true }).
+                                    populate('idJardinero', 'usuario');
+
+    // console.log(solicitud.idUsuario);
+    // console.log(solicitud.idJardinero.usuario);
+    // console.log(typeof(solicitud.idUsuario));
+    // console.log(typeof(solicitud.idJardinero.usuario));
+    // console.log(JSON.stringify(solicitud.idUsuario).length);
+    // console.log(JSON.stringify(solicitud.idJardinero.usuario).length);
+
 
     res.status(200).json({
         ok: true,

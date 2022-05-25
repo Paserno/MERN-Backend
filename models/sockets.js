@@ -1,4 +1,4 @@
-const { grabarMensaje } = require('../controllers/socket');
+const { grabarMensaje, cambiosSolicitudSocket } = require('../controllers/socket');
 const { comprobarJWT } = require('../helpers');
 
 
@@ -29,7 +29,7 @@ class Sockets {
             socket.join(id);
 
             // Escucha cuando el cliente manda un mensaje
-            socket.on('mensaje-personal', async(payload)=>{
+            socket.on('mensaje-personal', async(payload) =>{
                
                 const mensaje = await grabarMensaje(payload);
                 payload.de = JSON.stringify(payload.de)
@@ -39,6 +39,21 @@ class Sockets {
                 this.io.to(payload.para).emit('mensaje-personal', mensaje);
                 this.io.to(payload.de).emit('mensaje-personal', mensaje);
             });
+
+
+            // Escuchar cuando haya un cambio en la solicitud
+            socket.on('cambio-solicitud', async(payload) => {
+
+                const solicitud = await cambiosSolicitudSocket(payload);
+                const uid = JSON.stringify(solicitud.idUsuario);
+                const jid = JSON.stringify(solicitud.idJardinero.usuario);
+
+                console.log(uid);
+                console.log(jid);
+
+                this.io.to(uid).emit('cambio-solicitud', solicitud);
+                this.io.to(jid).emit('cambio-solicitud', solicitud);
+            })
 
         })
 

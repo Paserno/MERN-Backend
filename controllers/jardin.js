@@ -75,7 +75,7 @@ const actualizarJardinero = async(req, res = response) => {
 const obtenerJardinero = async(req, res = response ) => {
 
     const { usuario } = req.params;
-    const usuarioRol = req.usuario.rol
+    // const usuarioRol = req.usuario.rol
 
     // if ( usuarioRol !== 'ADMIN_ROLE'){
     //     return res.status(401).json({
