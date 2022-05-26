@@ -257,11 +257,11 @@ const eliminarDetalleSolicitud = async( req, res = response) => {
 
     try {
 
-    const detalleServicio = await DetalleSolicitud.findByIdAndUpdate( id, { estado: false }, { new: true } );
+    const detalleSolicitud = await DetalleSolicitud.findByIdAndUpdate( id, { estado: false }, { new: true } );
 
     res.status(200).json({
         ok: true,
-        detalleServicio
+        detalleSolicitud
     });
 
 } catch (error) {
