@@ -80,11 +80,11 @@ class Sockets {
                 if (data){
                     const {detalleSolicitud, solicitud} = data;
                     const uid = JSON.stringify(solicitud.idUsuario);
-                    const jid = JSON.stringify(solicitud[0].idJardinero.usuario);
+                    const jid = JSON.stringify(solicitud.idJardinero.usuario);
 
 
-                    this.io.to(uid).emit('eliminar-solicitud', detalleSolicitud);
-                    this.io.to(jid).emit('eliminar-solicitud', detalleSolicitud);
+                    this.io.to(uid).emit('crear-detalle-solicitud', detalleSolicitud);
+                    this.io.to(jid).emit('crear-detalle-solicitud', detalleSolicitud);
 
                 }
             })
@@ -95,12 +95,12 @@ class Sockets {
                 if (data){
                     const {detalleSolicitud, solicitud} = data;
                     const uid = JSON.stringify(solicitud.idUsuario);
-                    const jid = JSON.stringify(solicitud[0].idJardinero.usuario);
+                    const jid = JSON.stringify(solicitud.idJardinero.usuario);
 
 
 
-                    this.io.to(uid).emit('eliminar-solicitud', detalleSolicitud);
-                    this.io.to(jid).emit('eliminar-solicitud', detalleSolicitud);
+                    this.io.to(uid).emit('cambio-detalle-solicitud', detalleSolicitud);
+                    this.io.to(jid).emit('cambio-detalle-solicitud', detalleSolicitud);
 
                 }
                 
@@ -110,12 +110,14 @@ class Sockets {
                 const data = await eliminarDetalleSolicitudSocket(payload);
                 if (data){
                     const {detalleSolicitud, solicitud} = data;
-                    console.log(solicitud);
                     const uid = JSON.stringify(solicitud.idUsuario);
-                    const jid = JSON.stringify(solicitud[0].idJardinero.usuario);
+                    const jid = JSON.stringify(solicitud.idJardinero.usuario);
+                    console.log('Usuario uid', uid)
+                    console.log('Jardinero uid', jid)
+                    
 
-                    this.io.to(uid).emit('eliminar-solicitud', detalleSolicitud);
-                    this.io.to(jid).emit('eliminar-solicitud', detalleSolicitud);
+                    this.io.to(uid).emit('eliminar-detalle-solicitud', detalleSolicitud);
+                    this.io.to(jid).emit('eliminar-detalle-solicitud', detalleSolicitud);
 
                 }
             })

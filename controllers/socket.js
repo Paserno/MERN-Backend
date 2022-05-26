@@ -59,9 +59,9 @@ const crearDetalleSolicitudSocket = async(payload) => {
         await detalleSolicitud.save();
         
         const idSolicitud = detalleSolicitud.idSolicitud;
-        // const query = {idSolicitud, estado: true}
+        const query = {idSolicitud, estado: true}
         // const solicitud = await Solicitud.find( query );
-        const solicitud = await Solicitud.find( idSolicitud ).populate('idJardinero', 'usuario');
+        const [solicitud] = await Solicitud.find( idSolicitud ).populate('idJardinero', 'usuario');
 
 
 
@@ -97,7 +97,7 @@ const actualizarDetalleSolicitudSocket = async(payload) => {
 
         const idSolicitud = detalleSolicitud.idSolicitud;
         // const query = {idSolicitud, estado: true}
-        const solicitud = await Solicitud.find( idSolicitud ).populate('idJardinero', 'usuario');
+        const [solicitud] = await Solicitud.find( idSolicitud ).populate('idJardinero', 'usuario');
 
 
 
@@ -118,7 +118,7 @@ const eliminarDetalleSolicitudSocket = async(payload) => {
         const idSolicitud = detalleSolicitud.idSolicitud;
         // console.log('verificar: ', idSolicitud);
         // const query = {idSolicitud, estado: true}
-        const solicitud = await Solicitud.find( idSolicitud ).populate('idJardinero', 'usuario');
+        const [solicitud] = await Solicitud.find( idSolicitud ).populate('idJardinero', 'usuario');
 
 
         return {detalleSolicitud, solicitud};
