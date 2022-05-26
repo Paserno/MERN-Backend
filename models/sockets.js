@@ -1,4 +1,4 @@
-const { grabarMensaje, cambiosSolicitudSocket } = require('../controllers/socket');
+const { grabarMensaje, cambiosSolicitudSocket, eliminarSolicitudSocket } = require('../controllers/socket');
 const { comprobarJWT } = require('../helpers');
 
 
@@ -48,11 +48,23 @@ class Sockets {
                 const uid = JSON.stringify(solicitud.idUsuario);
                 const jid = JSON.stringify(solicitud.idJardinero.usuario);
 
-                console.log(uid);
-                console.log(jid);
 
                 this.io.to(uid).emit('cambio-solicitud', solicitud);
                 this.io.to(jid).emit('cambio-solicitud', solicitud);
+            })
+
+
+
+            // Escuchar cuando se haya eliminado la solicitud
+            socket.on('eliminar-solicitud', async(payload) => {
+
+                const solicitud = await eliminarSolicitudSocket(payload);
+                const uid = JSON.stringify(solicitud.idUsuario);
+                const jid = JSON.stringify(solicitud.idJardinero.usuario);
+
+
+                this.io.to(uid).emit('eliminar-solicitud', solicitud);
+                this.io.to(jid).emit('eliminar-solicitud', solicitud);
             })
 
         })

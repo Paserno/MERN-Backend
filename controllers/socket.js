@@ -34,8 +34,24 @@ const cambiosSolicitudSocket = async(payload) => {
     }
 }
 
+const eliminarSolicitudSocket = async(payload) => {
+    try {
+        const { id } = payload;
+
+        const solicitud = await Solicitud.findByIdAndUpdate( id, { estado: false}, { new: true}).
+                                                populate('idJardinero', 'usuario');
+        
+        return solicitud;
+        
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
 
 module.exports = {
     grabarMensaje,
     cambiosSolicitudSocket,
+    eliminarSolicitudSocket,
 }
