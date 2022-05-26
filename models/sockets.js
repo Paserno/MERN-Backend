@@ -80,7 +80,7 @@ class Sockets {
                 if (data){
                     const {detalleSolicitud, solicitud} = data;
                     const uid = JSON.stringify(solicitud.idUsuario);
-                    const jid = JSON.stringify(solicitud.idJardinero.usuario);
+                    const jid = JSON.stringify(solicitud[0].idJardinero.usuario);
 
 
                     this.io.to(uid).emit('eliminar-solicitud', detalleSolicitud);
@@ -95,7 +95,8 @@ class Sockets {
                 if (data){
                     const {detalleSolicitud, solicitud} = data;
                     const uid = JSON.stringify(solicitud.idUsuario);
-                    const jid = JSON.stringify(solicitud.idJardinero.usuario);
+                    const jid = JSON.stringify(solicitud[0].idJardinero.usuario);
+
 
 
                     this.io.to(uid).emit('eliminar-solicitud', detalleSolicitud);
@@ -107,12 +108,11 @@ class Sockets {
 
             socket.on('eliminar-detalle-solicitud', async(payload) => {
                 const data = await eliminarDetalleSolicitudSocket(payload);
-                console.log(data)
                 if (data){
                     const {detalleSolicitud, solicitud} = data;
+                    console.log(solicitud);
                     const uid = JSON.stringify(solicitud.idUsuario);
-                    const jid = JSON.stringify(solicitud.idJardinero.usuario);
-
+                    const jid = JSON.stringify(solicitud[0].idJardinero.usuario);
 
                     this.io.to(uid).emit('eliminar-solicitud', detalleSolicitud);
                     this.io.to(jid).emit('eliminar-solicitud', detalleSolicitud);
