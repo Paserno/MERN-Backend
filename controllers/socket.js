@@ -57,9 +57,13 @@ const crearDetalleSolicitudSocket = async(payload) => {
     try {
         const detalleSolicitud = new DetalleSolicitud(payload);
         await detalleSolicitud.save();
+        
+        const idSolicitud = detalleSolicitud.idSolicitud;
+        const query = {idSolicitud, estado: true}
+        const solicitud = await Solicitud.find( query );
 
 
-        return detalleSolicitud;
+        return {detalleSolicitud, solicitud};
 
         ;
         
@@ -72,7 +76,7 @@ const crearDetalleSolicitudSocket = async(payload) => {
 const actualizarDetalleSolicitudSocket = async(payload) => {
     try {
         const { id } = payload;
-        const { estado, idSolicitud, idTipoServicio, ...body } = payload;
+        const { estado, idTipoServicio, ...body } = payload;
         let data = {
             ...body
         }
@@ -89,7 +93,13 @@ const actualizarDetalleSolicitudSocket = async(payload) => {
         }
         const detalleSolicitud = await (await DetalleSolicitud.findByIdAndUpdate( id, data, { new: true })).populated('idTipoServicio', 'nombre');
 
-        return detalleSolicitud;
+        const idSolicitud = detalleSolicitud.idSolicitud;
+        const query = {idSolicitud, estado: true}
+        const solicitud = await Solicitud.find( query );
+
+
+        return {detalleSolicitud, solicitud};
+
 
     } catch (error) {
         console.log(error);
@@ -102,7 +112,12 @@ const eliminarDetalleSolicitudSocket = async(payload) => {
         const { id } = payload;
         const detalleSolicitud = await DetalleSolicitud.findByIdAndUpdate( id, {estado: false}, {new: true});
 
-        return detalleSolicitud;
+        const idSolicitud = detalleSolicitud.idSolicitud;
+        const query = {idSolicitud, estado: true}
+        const solicitud = await Solicitud.find( query );
+
+
+        return {detalleSolicitud, solicitud};
         
     } catch (error) {
         console.log(error);

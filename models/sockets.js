@@ -75,35 +75,48 @@ class Sockets {
 
 
             socket.on('crear-detalle-solicitud', async(payload) => {
-                const detalleSolicitud = await crearDetalleSolicitudSocket(payload);
-                if (detalleSolicitud){
-                    // const uid = JSON.stringify(solicitud.idUsuario);
+                const data = await crearDetalleSolicitudSocket(payload);
+                console.log(data)
+                if (data){
+                    const {detalleSolicitud, solicitud} = data;
+                    const uid = JSON.stringify(solicitud.idUsuario);
+                    const jid = JSON.stringify(solicitud.idJardinero.usuario);
 
 
-                    // this.io.to(uid).emit('cambio-solicitud', solicitud);
+                    this.io.to(uid).emit('eliminar-solicitud', detalleSolicitud);
+                    this.io.to(jid).emit('eliminar-solicitud', detalleSolicitud);
 
                 }
             })
 
             socket.on('cambio-detalle-solicitud', async(payload) => {
-                const detalleSolicitud = await actualizarDetalleSolicitudSocket(payload);
-                if (detalleSolicitud){
-                    // const uid = JSON.stringify(solicitud.idUsuario);
+                const data = await actualizarDetalleSolicitudSocket(payload);
+                console.log(data)
+                if (data){
+                    const {detalleSolicitud, solicitud} = data;
+                    const uid = JSON.stringify(solicitud.idUsuario);
+                    const jid = JSON.stringify(solicitud.idJardinero.usuario);
 
-                    
-                    // this.io.to(uid).emit('cambio-solicitud', solicitud);
+
+                    this.io.to(uid).emit('eliminar-solicitud', detalleSolicitud);
+                    this.io.to(jid).emit('eliminar-solicitud', detalleSolicitud);
 
                 }
                 
             })
 
             socket.on('eliminar-detalle-solicitud', async(payload) => {
-                const detalleSolicitud = await eliminarDetalleSolicitudSocket(payload);
-                if (detalleSolicitud){
-                    // const uid = JSON.stringify(solicitud.idUsuario);
-                    
-                    // this.io.to(uid).emit('cambio-solicitud', solicitud);
-                    
+                const data = await eliminarDetalleSolicitudSocket(payload);
+                console.log(data)
+                if (data){
+                    const {detalleSolicitud, solicitud} = data;
+                    const uid = JSON.stringify(solicitud.idUsuario);
+                    const jid = JSON.stringify(solicitud.idJardinero.usuario);
+
+
+                    this.io.to(uid).emit('eliminar-solicitud', detalleSolicitud);
+                    this.io.to(jid).emit('eliminar-solicitud', detalleSolicitud);
+
                 }
             })
 
