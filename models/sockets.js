@@ -76,7 +76,7 @@ class Sockets {
 
             socket.on('crear-detalle-solicitud', async(payload) => {
                 const data = await crearDetalleSolicitudSocket(payload);
-                console.log(data)
+                //console.log(data)
                 if (data){
                     const {detalleSolicitud, solicitud} = data;
                     const uid = JSON.stringify(solicitud.idUsuario);
@@ -112,8 +112,6 @@ class Sockets {
                     const {detalleSolicitud, solicitud} = data;
                     const uid = JSON.stringify(solicitud.idUsuario);
                     const jid = JSON.stringify(solicitud.idJardinero.usuario);
-                    console.log('Usuario uid', uid)
-                    console.log('Jardinero uid', jid)
                     
 
                     this.io.to(uid).emit('eliminar-detalle-solicitud', detalleSolicitud);

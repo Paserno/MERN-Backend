@@ -55,11 +55,23 @@ const eliminarSolicitudSocket = async(payload) => {
 // -------- Detalle Solicitud ----------
 const crearDetalleSolicitudSocket = async(payload) => {
     try {
-        const detalleSolicitud = new DetalleSolicitud(payload);
-        await detalleSolicitud.save();
+        let data = new DetalleSolicitud(payload);
+        await data.save();
         
-        const idSolicitud = detalleSolicitud.idSolicitud;
-        const query = {idSolicitud, estado: true}
+        const id = data.idTipoServicio;
+        const tipoServicio = await TipoServicio.findById( id )
+        //console.log(tipoServicio)
+        const idTipoServicio = tipoServicio
+        
+        const idSolicitud = data.idSolicitud;
+
+
+        let detalleSolicitud = data
+
+        detalleSolicitud.idTipoServicio = idTipoServicio
+        
+        // const query = {idSolicitud, estado: true}
+        console.log(detalleSolicitud)
         // const solicitud = await Solicitud.find( query );
         const [solicitud] = await Solicitud.find( idSolicitud ).populate('idJardinero', 'usuario');
 
@@ -67,7 +79,6 @@ const crearDetalleSolicitudSocket = async(payload) => {
 
         return {detalleSolicitud, solicitud};
 
-        ;
         
     } catch (error) {
         console.log(error);
