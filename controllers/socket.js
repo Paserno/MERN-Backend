@@ -59,20 +59,17 @@ const crearDetalleSolicitudSocket = async(payload) => {
         await data.save();
         
         const id = data.idTipoServicio;
+        // Pedir TipoServicio para obtener Nombre
         const tipoServicio = await TipoServicio.findById( id )
-        //console.log(tipoServicio)
+        
         const idTipoServicio = tipoServicio
         
         const idSolicitud = data.idSolicitud;
-
 
         let detalleSolicitud = data
 
         detalleSolicitud.idTipoServicio = idTipoServicio
         
-        // const query = {idSolicitud, estado: true}
-        console.log(detalleSolicitud)
-        // const solicitud = await Solicitud.find( query );
         const [solicitud] = await Solicitud.find( idSolicitud ).populate('idJardinero', 'usuario');
 
 
@@ -104,7 +101,7 @@ const actualizarDetalleSolicitudSocket = async(payload) => {
                 idTipoServicio: idTipoServicio
             }
         }
-        const detalleSolicitud = await (await DetalleSolicitud.findByIdAndUpdate( id, data, { new: true })).populated('idTipoServicio', 'nombre');
+        const detalleSolicitud = await DetalleSolicitud.findByIdAndUpdate( id, data, { new: true }).populate('idTipoServicio', 'nombre');
 
         const idSolicitud = detalleSolicitud.idSolicitud;
         // const query = {idSolicitud, estado: true}
