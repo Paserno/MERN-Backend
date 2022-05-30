@@ -63,12 +63,12 @@ const actualizarJardinero = async(req, res = response) => {
     const { _id, usuario, ...resto } = req.body;
 
 
-    const jarinero = await Jardinero.findByIdAndUpdate( id, resto, {new: true}).populate('usuario', 'nombre');
+    const jardinero = await Jardinero.findByIdAndUpdate( id, resto, {new: true}).populate('usuario', 'nombre apellido correo');
     
 
     res.json({
         ok: true,
-        jarinero
+        jardinero
     });
 }
 

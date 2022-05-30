@@ -1,7 +1,8 @@
 const { Router } = require('express');
-const { obtenerJardinerosActivos, loginJardin } = require('../controllers/jardin');
+const { obtenerJardinerosActivos, loginJardin, actualizarJardinero } = require('../controllers/jardin');
 const { validarJWT, validarCampos } = require('../middlewares');
 const { check } = require('express-validator');
+const { existeJardineroPorId } = require('../helpers');
 
 
 /*
@@ -21,5 +22,11 @@ router.post('/login',[
     validarCampos
 ], loginJardin);
 
+router.put('/:id',[
+    validarJWT,
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom( existeJardineroPorId ),
+    validarCampos
+], actualizarJardinero)
 
 module.exports = router;
