@@ -1,7 +1,7 @@
 
 const url = ( window.location.hostname.includes('localhost') )
 ? 'http://localhost:8082/api/auth/'
-: '';
+: 'https://atj-backend.herokuapp.com/api/auth/';
 let usuario = null;
 let socket  = null;
 

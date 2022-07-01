@@ -1,7 +1,7 @@
 const miFormulario = document.querySelector('form');
 const url = ( window.location.hostname.includes('localhost') )
             ? 'http://localhost:8082/api/auth/'
-            : '';
+            : 'https://atj-backend.herokuapp.com/api/auth/';
 
 miFormulario.addEventListener('submit', ev => {
     ev.preventDefault();
