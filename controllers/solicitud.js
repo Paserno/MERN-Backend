@@ -92,14 +92,6 @@ const actualizarSolicitud = async( req, res = response ) => {
     const solicitud = await Solicitud.findByIdAndUpdate(id, data, { new: true }).
                                     populate('idJardinero', 'usuario');
 
-    // console.log(solicitud.idUsuario);
-    // console.log(solicitud.idJardinero.usuario);
-    // console.log(typeof(solicitud.idUsuario));
-    // console.log(typeof(solicitud.idJardinero.usuario));
-    // console.log(JSON.stringify(solicitud.idUsuario).length);
-    // console.log(JSON.stringify(solicitud.idJardinero.usuario).length);
-
-
     res.status(200).json({
         ok: true,
         solicitud

@@ -91,7 +91,7 @@ class Sockets {
 
             socket.on('cambio-detalle-solicitud', async(payload) => {
                 const data = await actualizarDetalleSolicitudSocket(payload);
-                console.log(data)
+                
                 if (data){
                     const {detalleSolicitud, solicitud} = data;
                     const uid = JSON.stringify(solicitud.idUsuario);
@@ -118,6 +118,14 @@ class Sockets {
                     this.io.to(jid).emit('eliminar-detalle-solicitud', detalleSolicitud);
 
                 }
+            })
+
+
+            socket.on('coordenadas-compartida', async(payload) => {
+                
+                const jid = JSON.stringify(payload.jid);
+
+                this.io.to(jid).emit('coordenadas-compartida', payload)
             })
 
         })

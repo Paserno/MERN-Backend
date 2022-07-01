@@ -45,7 +45,6 @@ const existeSolicitudPorId = async( id ) => {
     // Verificar si la id de la solicitud existe
     const existeSolicitud = await Solicitud.findById(id);
     if ( !existeSolicitud ) {
-        console.log('hola')
         throw new Error(`El idSolicitud no existe ${ id } `);
     }
 }
@@ -55,7 +54,6 @@ const existeDetalleSolicitudPorId = async( id ) => {
     // Verificar si la id de la solicitud existe
     const existeDetalleSolicitud = await DetalleSolicitud.findById(id);
     if ( !existeDetalleSolicitud ) {
-        console.log('hola')
         throw new Error(`El id no existe ${ id } `);
     }
 }
